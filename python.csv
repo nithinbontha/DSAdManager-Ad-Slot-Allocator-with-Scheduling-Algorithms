@@ -1,0 +1,28 @@
+
+---
+
+### ✅ `allocator/slot_allocator.py`
+
+```python
+import heapq
+
+class AdCampaign:
+    def __init__(self, start, end, bid, id):
+        self.start = start
+        self.end = end
+        self.bid = bid
+        self.id = id
+
+def allocate(campaigns, slots=1):
+    campaigns.sort(key=lambda x: x.start)
+    result = []
+    heap = []
+
+    for camp in campaigns:
+        while heap and heap[0][0] <= camp.start:
+            heapq.heappop(heap)
+        heapq.heappush(heap, (camp.end, -camp.bid, camp.id))
+        if len(heap) > slots:
+            heapq.heappop(heap)
+
+    return [x[2] for x in heap]
